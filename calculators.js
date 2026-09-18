@@ -38,14 +38,14 @@ export function torqueNm({ kw, rpm }) {
   if (!finite(kw, rpm) || kw < 0 || rpm <= 0) {
     throw new Error("Enter valid power and RPM.");
   }
-  return 9550 * kw / rpm;
+  return (60000 / (2 * Math.PI)) * kw / rpm;
 }
 
 export function powerFromTorqueKw({ torque, rpm }) {
   if (!finite(torque, rpm) || torque < 0 || rpm <= 0) {
     throw new Error("Enter valid torque and RPM.");
   }
-  return torque * rpm / 9550;
+  return torque * rpm / (60000 / (2 * Math.PI));
 }
 
 export function threePhasePowerKw({ volts, amps, powerFactor = 1, efficiency = 1 }) {
@@ -99,9 +99,13 @@ export function openBeltLength({ pulleyA, pulleyB, centerDistance }) {
   if (centerDistance <= (large - small) / 2) {
     throw new Error("Center distance is too small for this pulley pair.");
   }
-  return 2 * centerDistance +
-    Math.PI / 2 * (large + small) +
-    (large - small) ** 2 / (4 * centerDistance);
+  const radiusDifference = (large - small) / 2;
+  const tangentLength = Math.sqrt(centerDistance ** 2 - radiusDifference ** 2);
+  const angle = Math.asin(radiusDifference / centerDistance);
+
+  return 2 * tangentLength +
+    Math.PI * (large + small) / 2 +
+    2 * radiusDifference * angle;
 }
 
 
@@ -110,7 +114,8 @@ export function laundryGForce({ drumDiameterMm, rpm }) {
     throw new Error("Enter a valid drum diameter and RPM.");
   }
   const radiusCm = drumDiameterMm / 20;
-  return 1.118e-5 * radiusCm * rpm ** 2;
+  const rcfConstant = (4 * Math.PI ** 2 / (60 ** 2 * 9.80665)) * 0.01;
+  return rcfConstant * radiusCm * rpm ** 2;
 }
 
 export function rpmForGForce({ drumDiameterMm, gForce }) {
@@ -118,7 +123,8 @@ export function rpmForGForce({ drumDiameterMm, gForce }) {
     throw new Error("Enter a valid drum diameter and G-force.");
   }
   const radiusCm = drumDiameterMm / 20;
-  return Math.sqrt(gForce / (1.118e-5 * radiusCm));
+  const rcfConstant = (4 * Math.PI ** 2 / (60 ** 2 * 9.80665)) * 0.01;
+  return Math.sqrt(gForce / (rcfConstant * radiusCm));
 }
 
 export function surfaceSpeedMMin({ diameterMm, rpm }) {
