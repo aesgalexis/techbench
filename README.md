@@ -9,18 +9,18 @@ TechBench is intentionally simple: no accounts, no backend, no framework, no tel
 ## Tools
 
 ### Mechanical
-- **Drive speed / VFD frequency** — pulley ratio, driven RPM, and required motor frequency.
-- **Motor speed & slip** — synchronous RPM from frequency and pole count, plus estimated loaded speed.
-- **Power & torque** — convert shaft power and RPM to torque, or torque back to power.
-- **Cylinder force** — theoretical extension and retraction force from pressure, bore, and rod diameter.
-- **Open belt length** — approximate belt length from pulley diameters and center distance.
+- **Drive speed / VFD frequency** - pulley ratio, driven RPM, and required motor frequency.
+- **Motor speed & slip** - synchronous RPM from frequency and pole count, plus estimated loaded speed.
+- **Power & torque** - convert shaft power and RPM to torque, or torque back to power.
+- **Cylinder force** - theoretical extension and retraction force from pressure, bore, and rod diameter.
+- **Open belt length** - approximate belt length from pulley diameters and center distance.
 
 ### Electrical & thermal
-- **Three-phase power** — estimate electrical power or current from voltage, power factor, and efficiency.
-- **Water heating** — estimate energy and ideal heating time for a water load.
+- **Three-phase power** - estimate electrical power or current from voltage, power factor, and efficiency.
+- **Water heating** - estimate energy and ideal heating time for a water load.
 
 ### Conversions
-- **Pressure** — convert between bar, kPa, MPa, psi, and mH₂O.
+- **Pressure** - convert between bar, kPa, MPa, psi, and mH₂O.
 
 ## Philosophy
 
