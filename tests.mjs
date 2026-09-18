@@ -10,6 +10,17 @@ import {
   waterHeating,
   cylinderForce,
   openBeltLength,
+  laundryGForce,
+  rpmForGForce,
+  surfaceSpeedMMin,
+  rpmForSurfaceSpeed,
+  speedDifferentialPercent,
+  speedFromDifferential,
+  scale4to20FromMa,
+  scale4to20ToMa,
+  gearboxOutputRpm,
+  gearboxRatioForOutput,
+  steamSaturationTemperature,
   convertPressure,
 } from "./calculators.js";
 
@@ -70,6 +81,37 @@ close(force.retractN, 2721.4046361721585);
 
 close(openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 800 }), 2872.084039230147);
 
+const gForce = laundryGForce({ drumDiameterMm: 640, rpm: 650 });
+close(gForce, 151.1984);
+close(rpmForGForce({ drumDiameterMm: 640, gForce }), 650);
+
+const surfaceSpeed = surfaceSpeedMMin({ diameterMm: 800, rpm: 5 });
+close(surfaceSpeed, 12.566370614359172);
+close(rpmForSurfaceSpeed({ diameterMm: 800, speedMMin: surfaceSpeed }), 5);
+
+close(speedDifferentialPercent({ referenceSpeed: 20, secondarySpeed: 20.1 }), 0.5);
+close(speedFromDifferential({ referenceSpeed: 20, differentialPercent: 0.5 }), 20.1);
+
+close(scale4to20FromMa({ milliAmps: 12, engineeringMin: 0, engineeringMax: 10 }), 5);
+close(scale4to20ToMa({ value: 5, engineeringMin: 0, engineeringMax: 10 }), 12);
+
+close(gearboxOutputRpm({ inputRpm: 1450, ratio: 20 }), 72.5);
+close(gearboxRatioForOutput({ inputRpm: 1450, outputRpm: 72.5 }), 20);
+
+const steamAtAtmosphere = steamSaturationTemperature({
+  pressure: 1.01325,
+  unit: "bar",
+  reference: "absolute",
+});
+close(steamAtAtmosphere.celsius, 99.9743, 0.02);
+
+const steamAtZeroGauge = steamSaturationTemperature({
+  pressure: 0,
+  unit: "bar",
+  reference: "gauge",
+});
+close(steamAtZeroGauge.celsius, steamAtAtmosphere.celsius, 0.001);
+
 close(convertPressure(6, "bar", "psi"), 87.02264187015315);
 close(convertPressure(1, "bar", "kPa"), 100);
 
@@ -78,5 +120,7 @@ assert.throws(() => synchronousMotorSpeed({ hz: 50, poles: 5, slipPercent: 2 }))
 assert.throws(() => cylinderForce({ pressureBar: 6, boreMm: 50, rodMm: 60 }));
 assert.throws(() => openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 200 }));
 assert.throws(() => waterHeating({ liters: 100, startC: 60, targetC: 20, heaterKw: 10 }));
+assert.throws(() => laundryGForce({ drumDiameterMm: 0, rpm: 500 }));
+assert.throws(() => steamSaturationTemperature({ pressure: -2, unit: "bar", reference: "gauge" }));
 
 console.log("TechBench calculation tests passed.");
