@@ -2,9 +2,14 @@ import assert from "node:assert/strict";
 import {
   drivenRpm,
   requiredFrequency,
+  synchronousMotorSpeed,
+  torqueNm,
+  powerFromTorqueKw,
   threePhasePowerKw,
   threePhaseCurrentA,
   waterHeating,
+  cylinderForce,
+  openBeltLength,
   convertPressure,
 } from "./calculators.js";
 
@@ -24,6 +29,13 @@ close(
   }),
   188.40579710144928,
 );
+
+const speed = synchronousMotorSpeed({ hz: 50, poles: 6, slipPercent: 2.5 });
+close(speed.synchronousRpm, 1000);
+close(speed.loadedRpm, 975);
+
+close(torqueNm({ kw: 18.5, rpm: 1450 }), 121.84482758620689);
+close(powerFromTorqueKw({ torque: 121.84482758620689, rpm: 1450 }), 18.5);
 
 const kw = threePhasePowerKw({
   volts: 400,
@@ -52,10 +64,19 @@ const heat = waterHeating({
 close(heat.kwh, 26.1625);
 close(heat.minutes, 43.604166666666664);
 
+const force = cylinderForce({ pressureBar: 6, boreMm: 80, rodMm: 25 });
+close(force.extendN, 3015.928947446202);
+close(force.retractN, 2721.4046361721585);
+
+close(openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 800 }), 2872.084039230147);
+
 close(convertPressure(6, "bar", "psi"), 87.02264187015315);
 close(convertPressure(1, "bar", "kPa"), 100);
 
 assert.throws(() => drivenRpm({ motorRpm: 960, motorPulley: 115, drivenPulley: 0 }));
+assert.throws(() => synchronousMotorSpeed({ hz: 50, poles: 5, slipPercent: 2 }));
+assert.throws(() => cylinderForce({ pressureBar: 6, boreMm: 50, rodMm: 60 }));
+assert.throws(() => openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 200 }));
 assert.throws(() => waterHeating({ liters: 100, startC: 60, targetC: 20, heaterKw: 10 }));
 
 console.log("TechBench calculation tests passed.");
