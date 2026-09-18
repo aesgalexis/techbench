@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TechBench — a practical field toolbox for technicians.">
+  <title>TechBench — Field toolbox</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <div class="shell brand-row">
+      <h1 class="brand">TechBench</h1>
+      <p class="tagline">Quick field calculations for people standing next to real machines.</p>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <p>No login. No backend. No telemetry. Just useful numbers.</p>
+      <span class="status">v0.1 · field build</span>
+    </section>
+
+    <section class="grid">
+      <article class="card" id="drive-card">
+        <h2>Drive speed</h2>
+        <p class="sub">Pulley ratio, driven RPM, and target VFD frequency.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="motor-rpm">Motor rated RPM</label>
+            <input id="motor-rpm" type="number" inputmode="decimal" value="960" min="0">
+          </div>
+          <div class="field">
+            <label for="rated-hz">Rated Hz</label>
+            <input id="rated-hz" type="number" inputmode="decimal" value="50" min="0">
+          </div>
+          <div class="field">
+            <label for="motor-pulley">Motor pulley · mm</label>
+            <input id="motor-pulley" type="number" inputmode="decimal" value="115" min="0">
+          </div>
+          <div class="field">
+            <label for="driven-pulley">Driven pulley · mm</label>
+            <input id="driven-pulley" type="number" inputmode="decimal" value="640" min="0">
+          </div>
+          <div class="field wide">
+            <label for="target-rpm">Target driven RPM</label>
+            <input id="target-rpm" type="number" inputmode="decimal" value="650" min="0">
+          </div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Driven RPM @ rated Hz</span><span class="result-value" id="drive-rpm">—</span></div>
+          <div class="result-line"><span class="result-label">Required frequency</span><span class="result-value" id="drive-hz">—</span></div>
+          <div class="error" id="drive-error"></div>
+        </div>
+      </article>
+
+      <article class="card" id="power-card">
+        <h2>Three-phase power</h2>
+        <p class="sub">Estimate electrical power or line current.</p>
+        <div class="mode" aria-label="Calculation mode">
+          <button type="button" class="active" data-power-mode="power">Find kW</button>
+          <button type="button" data-power-mode="current">Find A</button>
+        </div>
+        <div class="fields">
+          <div class="field" id="power-amps-field">
+            <label for="power-amps">Current · A</label>
+            <input id="power-amps" type="number" inputmode="decimal" value="32" min="0">
+          </div>
+          <div class="field" id="power-kw-field" hidden>
+            <label for="power-kw">Power · kW</label>
+            <input id="power-kw" type="number" inputmode="decimal" value="18.5" min="0">
+          </div>
+          <div class="field">
+            <label for="power-volts">Line voltage · V</label>
+            <input id="power-volts" type="number" inputmode="decimal" value="400" min="0">
+          </div>
+          <div class="field">
+            <label for="power-pf">Power factor</label>
+            <input id="power-pf" type="number" inputmode="decimal" value="0.85" min="0.01" max="1" step="0.01">
+          </div>
+          <div class="field">
+            <label for="power-eff">Efficiency</label>
+            <input id="power-eff" type="number" inputmode="decimal" value="0.9" min="0.01" max="1" step="0.01">
+          </div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="power-result-label">Estimated power</span><span class="result-value" id="power-result">—</span></div>
+          <div class="error" id="power-error"></div>
+        </div>
+      </article>
+
+      <article class="card" id="heat-card">
+        <h2>Water heating</h2>
+        <p class="sub">Ideal energy and heat-up time, before real-world losses.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="heat-liters">Water · L</label>
+            <input id="heat-liters" type="number" inputmode="decimal" value="500" min="0">
+          </div>
+          <div class="field">
+            <label for="heat-kw">Heater · kW</label>
+            <input id="heat-kw" type="number" inputmode="decimal" value="36" min="0">
+          </div>
+          <div class="field">
+            <label for="heat-start">Start · °C</label>
+            <input id="heat-start" type="number" inputmode="decimal" value="15">
+          </div>
+          <div class="field">
+            <label for="heat-target">Target · °C</label>
+            <input id="heat-target" type="number" inputmode="decimal" value="60">
+          </div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Ideal energy</span><span class="result-value" id="heat-energy">—</span></div>
+          <div class="result-line"><span class="result-label">Ideal time</span><span class="result-value" id="heat-time">—</span></div>
+          <div class="error" id="heat-error"></div>
+        </div>
+      </article>
+
+      <article class="card" id="pressure-card">
+        <h2>Pressure</h2>
+        <p class="sub">Fast conversion for gauges, manuals, and datasheets.</p>
+        <div class="fields">
+          <div class="field wide">
+            <label for="pressure-value">Value</label>
+            <input id="pressure-value" type="number" inputmode="decimal" value="6">
+          </div>
+          <div class="field">
+            <label for="pressure-from">From</label>
+            <select id="pressure-from">
+              <option value="bar" selected>bar</option>
+              <option value="kPa">kPa</option>
+              <option value="MPa">MPa</option>
+              <option value="psi">psi</option>
+              <option value="mH2O">mH₂O</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pressure-to">To</label>
+            <select id="pressure-to">
+              <option value="bar">bar</option>
+              <option value="kPa">kPa</option>
+              <option value="MPa">MPa</option>
+              <option value="psi" selected>psi</option>
+              <option value="mH2O">mH₂O</option>
+            </select>
+          </div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Converted</span><span class="result-value" id="pressure-result">—</span></div>
+          <div class="error" id="pressure-error"></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">Built for field use. Verify critical values against manufacturer documentation and measurements. · <a href="https://github.com/aesgalexis/techbench">Source on GitHub</a></div>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
