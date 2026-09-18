@@ -341,7 +341,7 @@ function renderSteam() {
     });
     $("steam-c").textContent = `${format(result.celsius, 1)} °C`;
     $("steam-f").textContent = `${format(result.fahrenheit, 1)} °F`;
-    $("steam-abs").textContent = `${format(result.absoluteBar, 3)} bara`;
+    $("steam-abs").textContent = `${format(result.absoluteBar, 3)} bara / ${format(result.absolutePsi, 2)} psia`;
     $("steam-error").textContent = "";
   } catch (error) {
     $("steam-c").textContent = "-";
