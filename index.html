@@ -18,7 +18,7 @@
   <main class="shell">
     <section class="intro">
       <p>No login. No backend. No telemetry. Just useful numbers.</p>
-      <span class="status">v0.2 · field build</span>
+      <span class="status">v0.3 · field build</span>
     </section>
 
     <section class="picker-panel" aria-labelledby="tool-picker-label">
@@ -31,10 +31,18 @@
           <option value="torque">Power & torque</option>
           <option value="cylinder">Cylinder force</option>
           <option value="belt">Open belt length</option>
+          <option value="gearbox">Gearbox ratio</option>
         </optgroup>
-        <optgroup label="Electrical & thermal">
-          <option value="power">Three-phase power</option>
+        <optgroup label="Laundry & process">
+          <option value="gforce">Washer G-force</option>
+          <option value="surface-speed">Roller surface speed</option>
+          <option value="differential">Speed differential</option>
+          <option value="steam">Steam saturation temperature</option>
           <option value="heat">Water heating</option>
+        </optgroup>
+        <optgroup label="Electrical & instrumentation">
+          <option value="power">Three-phase power</option>
+          <option value="signal">4-20 mA scaler</option>
         </optgroup>
         <optgroup label="Conversions">
           <option value="pressure">Pressure</option>
@@ -162,6 +170,114 @@
           <div class="result-line"><span class="result-label">Approx. belt length</span><span class="result-value" id="belt-mm">-</span></div>
           <div class="result-line"><span class="result-label">In metres</span><span class="result-value" id="belt-m">-</span></div>
           <div class="error" id="belt-error"></div>
+        </div>
+      </article>
+
+
+      <article class="card tool-card" id="gearbox-card" data-tool="gearbox" hidden>
+        <h2>Gearbox ratio</h2>
+        <p class="sub">Calculate output RPM from a reduction ratio, or the ratio needed for a target output speed.</p>
+        <div class="mode" aria-label="Gearbox calculation mode">
+          <button type="button" class="active" data-gearbox-mode="output">Find output RPM</button>
+          <button type="button" data-gearbox-mode="ratio">Find ratio</button>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="gear-input">Input RPM</label><input id="gear-input" type="number" inputmode="decimal" value="1450" min="0"></div>
+          <div class="field" id="gear-ratio-field"><label for="gear-ratio">Ratio i:1</label><input id="gear-ratio" type="number" inputmode="decimal" value="20" min="0" step="0.01"></div>
+          <div class="field" id="gear-output-field" hidden><label for="gear-output">Target output RPM</label><input id="gear-output" type="number" inputmode="decimal" value="72.5" min="0"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="gear-result-label">Output speed</span><span class="result-value" id="gear-result">-</span></div>
+          <div class="error" id="gear-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="gforce-card" data-tool="gforce" hidden>
+        <h2>Washer G-force</h2>
+        <p class="sub">Calculate extraction G from drum diameter and RPM, or RPM required for a target G.</p>
+        <div class="mode" aria-label="G-force calculation mode">
+          <button type="button" class="active" data-gforce-mode="g">Find G</button>
+          <button type="button" data-gforce-mode="rpm">Find RPM</button>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="g-diameter">Drum diameter · mm</label><input id="g-diameter" type="number" inputmode="decimal" value="640" min="0"></div>
+          <div class="field" id="g-rpm-field"><label for="g-rpm">Drum RPM</label><input id="g-rpm" type="number" inputmode="decimal" value="650" min="0"></div>
+          <div class="field" id="g-target-field" hidden><label for="g-target">Target G</label><input id="g-target" type="number" inputmode="decimal" value="150" min="0"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="g-result-label">Centrifugal force</span><span class="result-value" id="g-result">-</span></div>
+          <div class="error" id="g-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="surface-speed-card" data-tool="surface-speed" hidden>
+        <h2>Roller surface speed</h2>
+        <p class="sub">Convert roller diameter and RPM to m/min, or work backwards from line speed.</p>
+        <div class="mode" aria-label="Surface speed calculation mode">
+          <button type="button" class="active" data-surface-mode="speed">Find m/min</button>
+          <button type="button" data-surface-mode="rpm">Find RPM</button>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="surface-diameter">Roller diameter · mm</label><input id="surface-diameter" type="number" inputmode="decimal" value="800" min="0"></div>
+          <div class="field" id="surface-rpm-field"><label for="surface-rpm">Roller RPM</label><input id="surface-rpm" type="number" inputmode="decimal" value="5" min="0"></div>
+          <div class="field" id="surface-speed-field" hidden><label for="surface-speed">Surface speed · m/min</label><input id="surface-speed" type="number" inputmode="decimal" value="12.57" min="0"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="surface-result-label">Surface speed</span><span class="result-value" id="surface-result">-</span></div>
+          <div class="error" id="surface-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="differential-card" data-tool="differential" hidden>
+        <h2>Speed differential</h2>
+        <p class="sub">Compare two line speeds, or calculate the secondary speed for a target percentage difference.</p>
+        <div class="mode" aria-label="Differential calculation mode">
+          <button type="button" class="active" data-diff-mode="percent">Find %</button>
+          <button type="button" data-diff-mode="speed">Find speed</button>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="diff-reference">Reference speed</label><input id="diff-reference" type="number" inputmode="decimal" value="20" min="0"></div>
+          <div class="field" id="diff-secondary-field"><label for="diff-secondary">Secondary speed</label><input id="diff-secondary" type="number" inputmode="decimal" value="20.1" min="0"></div>
+          <div class="field" id="diff-percent-field" hidden><label for="diff-percent">Target differential · %</label><input id="diff-percent" type="number" inputmode="decimal" value="0.5" step="0.01"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="diff-result-label">Differential</span><span class="result-value" id="diff-result">-</span></div>
+          <div class="error" id="diff-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="steam-card" data-tool="steam" hidden>
+        <h2>Steam saturation temperature</h2>
+        <p class="sub">Approximate saturated-steam temperature from pressure. Choose gauge or absolute pressure correctly.</p>
+        <div class="fields">
+          <div class="field"><label for="steam-pressure">Pressure</label><input id="steam-pressure" type="number" inputmode="decimal" value="6" step="0.01"></div>
+          <div class="field"><label for="steam-unit">Unit</label><select id="steam-unit"><option value="bar" selected>bar</option><option value="psi">psi</option></select></div>
+          <div class="field wide"><label for="steam-reference">Pressure reference</label><select id="steam-reference"><option value="gauge" selected>Gauge - barg / psig</option><option value="absolute">Absolute - bara / psia</option></select></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Saturation temperature</span><span class="result-value" id="steam-c">-</span></div>
+          <div class="result-line"><span class="result-label">Fahrenheit</span><span class="result-value" id="steam-f">-</span></div>
+          <div class="result-line"><span class="result-label">Absolute pressure used</span><span class="result-value" id="steam-abs">-</span></div>
+          <div class="error" id="steam-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="signal-card" data-tool="signal" hidden>
+        <h2>4-20 mA scaler</h2>
+        <p class="sub">Convert a loop current to an engineering value, or calculate the expected current for a known value.</p>
+        <div class="mode" aria-label="4-20 mA calculation mode">
+          <button type="button" class="active" data-signal-mode="value">mA to value</button>
+          <button type="button" data-signal-mode="ma">Value to mA</button>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="signal-min">Engineering min</label><input id="signal-min" type="number" inputmode="decimal" value="0"></div>
+          <div class="field"><label for="signal-max">Engineering max</label><input id="signal-max" type="number" inputmode="decimal" value="10"></div>
+          <div class="field wide" id="signal-ma-field"><label for="signal-ma">Loop current · mA</label><input id="signal-ma" type="number" inputmode="decimal" value="12" step="0.01"></div>
+          <div class="field wide" id="signal-value-field" hidden><label for="signal-value">Engineering value</label><input id="signal-value" type="number" inputmode="decimal" value="5" step="0.01"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="signal-result-label">Scaled value</span><span class="result-value" id="signal-result">-</span></div>
+          <div class="error" id="signal-error"></div>
         </div>
       </article>
 
