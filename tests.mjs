@@ -45,7 +45,7 @@ const speed = synchronousMotorSpeed({ hz: 50, poles: 6, slipPercent: 2.5 });
 close(speed.synchronousRpm, 1000);
 close(speed.loadedRpm, 975);
 
-close(torqueNm({ kw: 18.5, rpm: 1450 }), 121.84482758620689);
+close(torqueNm({ kw: 18.5, rpm: 1450 }), 121.83585298758885);
 close(powerFromTorqueKw({ torque: 121.84482758620689, rpm: 1450 }), 18.5);
 
 const kw = threePhasePowerKw({
@@ -79,11 +79,14 @@ const force = cylinderForce({ pressureBar: 6, boreMm: 80, rodMm: 25 });
 close(force.extendN, 3015.928947446202);
 close(force.retractN, 2721.4046361721585);
 
-close(openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 800 }), 2872.084039230147);
+close(openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 800 }), 2872.883073618424);
 
 const gForce = laundryGForce({ drumDiameterMm: 640, rpm: 650 });
-close(gForce, 151.1536);
+close(gForce, 151.18658314366968);
 close(rpmForGForce({ drumDiameterMm: 640, gForce }), 650);
+
+const electroluxG = laundryGForce({ drumDiameterMm: 920, rpm: 825 });
+close(electroluxG, 350, 0.2);
 
 const surfaceSpeed = surfaceSpeedMMin({ diameterMm: 800, rpm: 5 });
 close(surfaceSpeed, 12.566370614359172);
