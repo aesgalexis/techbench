@@ -108,3 +108,9 @@ footer a { color: inherit; }
   header { padding-top: 28px; }
   .card { padding: 18px; }
 }
+
+
+/* Accuracy page spacing */
+main > .card + .card {
+  margin-top: 16px;
+}
