@@ -1,6 +1,6 @@
 # TechBench
 
-A small, practical field toolbox for technicians.
+A small, practical field toolbox for technicians working around real machines.
 
 **Live:** https://aesgalexis.github.io/techbench/
 
@@ -15,22 +15,30 @@ TechBench is intentionally simple: no accounts, no backend, no framework, no tel
 - **Motor speed & slip** - synchronous RPM from frequency and pole count, plus estimated loaded speed.
 - **Power & torque** - convert shaft power and RPM to torque, or torque back to power.
 - **Cylinder force** - theoretical extension and retraction force from pressure, bore, and rod diameter.
-- **Open belt length** - approximate belt length from pulley diameters and center distance.
+- **Open belt length** - calculate open-belt length from pulley diameters and center distance using tangent geometry.
 - **Gearbox ratio** - calculate output RPM from a reduction ratio, or the ratio required for a target output speed.
 
 ### Laundry & process
 - **Washer G-force** - calculate extraction G from drum diameter and RPM, or RPM required for a target G.
 - **Roller surface speed** - convert roller diameter and RPM to m/min, or work backwards from line speed.
 - **Speed differential** - compare two line speeds or calculate a target secondary speed from a percentage differential.
-- **Steam saturation temperature** - approximate saturated-steam temperature from bar/psi, with gauge or absolute pressure.
+- **Steam saturation temperature** - calculate saturated-steam temperature from bar or psi, with gauge or absolute pressure.
 - **Water heating** - estimate energy and ideal heating time for a water load.
 
 ### Electrical & instrumentation
-- **Three-phase power** - estimate electrical power or current from voltage, power factor, and efficiency.
+- **Three-phase power** - estimate output power or line current from voltage, power factor, and efficiency.
 - **4-20 mA scaler** - convert loop current to engineering units or calculate the expected current for a known value.
 
 ### Conversions
 - **Pressure** - convert between bar, kPa, MPa, psi, and mH₂O.
+
+## Accuracy
+
+TechBench separates exact algebra and geometry from engineering estimates and thermodynamic properties.
+
+The calculation methods, assumptions, limitations, cross-checks, and primary references are documented on the [Accuracy and sources](https://aesgalexis.github.io/techbench/accuracy.html) page.
+
+Critical machine values should still be checked against manufacturer documentation and real measurements.
 
 ## Philosophy
 
@@ -54,6 +62,7 @@ No install step is required.
 
 ```
 index.html       UI and calculator selector
+accuracy.html    methods, assumptions, and source references
 styles.css       visual system
 app.js           browser interactions
 calculators.js   pure calculation functions
@@ -62,7 +71,7 @@ tests.mjs        zero-dependency tests
 
 ## Status
 
-Early public build. More tools are added when they solve an actual field problem.
+v0.3 field build. Public, usable, and intentionally small. More tools are added when they solve an actual field problem.
 
 ## License
 
