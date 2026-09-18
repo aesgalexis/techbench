@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TechBench calculation methods, assumptions, and sources.">
+  <title>TechBench - Accuracy and sources</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <div class="shell brand-row">
+      <h1 class="brand">TechBench</h1>
+      <p class="tagline">Calculation methods, assumptions, and source references.</p>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <p><a href="./">Back to calculators</a></p>
+      <span class="status">accuracy notes</span>
+    </section>
+
+    <article class="card">
+      <h2>How to read TechBench numbers</h2>
+      <p class="sub">A calculator can be mathematically precise while the real machine is not. Measurement error, slip, friction, heat loss, pressure drop, sensor accuracy, and manufacturer tolerances often matter more than extra decimal places.</p>
+      <div class="result-line"><span class="result-label">Exact geometry / algebra</span><span class="result-value">High numerical confidence</span></div>
+      <div class="result-line"><span class="result-label">Engineering estimate</span><span class="result-value">Assumptions matter</span></div>
+      <div class="result-line"><span class="result-label">Thermodynamic property</span><span class="result-value">Standard formulation</span></div>
+    </article>
+
+    <article class="card">
+      <h2>Mechanical</h2>
+      <p><strong>Drive speed / VFD frequency</strong><br>Ideal pulley-ratio geometry. It assumes effective pulley diameters, no belt slip, and motor speed scaling approximately with frequency. The VFD-frequency result is an estimate because induction-motor slip changes with load.</p>
+      <p><strong>Motor speed & slip</strong><br>Synchronous speed uses n = 120f/p. Loaded speed applies the entered slip percentage. ABB and Siemens publish the same synchronous-speed relationship.</p>
+      <p><strong>Power & torque</strong><br>Uses the exact relationship P = Tω. The familiar industrial constant 9550 is a rounded form of 60000/(2π). TechBench now uses the unrounded expression.</p>
+      <p><strong>Cylinder force</strong><br>Uses F = pA. Retraction subtracts rod area. This is theoretical force from differential pressure. Real force is lower because of friction, seals, side load, and exhaust/back pressure.</p>
+      <p><strong>Open belt length</strong><br>Uses exact open-belt tangent geometry. Use pitch/effective pulley diameters, not blindly the outside diameter. Final belt selection should still follow the belt manufacturer's catalogue and available standard lengths.</p>
+      <p><strong>Gearbox ratio</strong><br>Pure kinematic ratio: output RPM = input RPM / ratio. It does not model mechanical loss, backlash, or motor slip.</p>
+    </article>
+
+    <article class="card">
+      <h2>Laundry & process</h2>
+      <p><strong>Washer G-force</strong><br>Derived directly from centripetal acceleration divided by standard gravity, g = 9.80665 m/s². The current constant is calculated rather than rounded. As a cross-check, Electrolux lists a 920 mm drum at 825 RPM as G-factor 350; TechBench calculates about 350.1.</p>
+      <p><strong>Roller surface speed</strong><br>Uses circumference × RPM. It is exact for the entered effective diameter and shaft speed, but the real textile/belt speed can differ because of slip or compression.</p>
+      <p><strong>Speed differential</strong><br>Pure percentage algebra: (secondary - reference) / reference × 100. Positive means the secondary speed is faster.</p>
+      <p><strong>Steam saturation temperature</strong><br>Uses the IAPWS-IF97 Region 4 saturation relationship. Gauge pressure is converted to absolute pressure using standard atmosphere, 1.01325 bar. This gives the saturation temperature of water/steam at that pressure, not necessarily the measured chest, cylinder, pipe, or surface temperature.</p>
+      <p><strong>Water heating</strong><br>Uses Q = mcΔT with 1 litre of water approximated as 1 kg and c = 4.186 kJ/(kg·K). The result is ideal heating energy/time before vessel heat capacity and environmental/process losses.</p>
+    </article>
+
+    <article class="card">
+      <h2>Electrical & instrumentation</h2>
+      <p><strong>Three-phase power</strong><br>Uses P = √3 × V × I × power factor × efficiency. With efficiency included, the displayed kW is estimated shaft/output power. The inverse calculation estimates line current from output kW. It assumes a balanced three-phase system.</p>
+      <p><strong>4-20 mA scaler</strong><br>Linear two-point scaling. 4 mA is the engineering minimum and 20 mA is the engineering maximum. Values outside 4-20 mA are intentionally allowed because under-range and over-range signals can be useful in diagnostics.</p>
+    </article>
+
+    <article class="card">
+      <h2>Conversions</h2>
+      <p><strong>Pressure</strong><br>bar and psi conversions use SI/NIST conversion factors. mH₂O uses the conventional water-column definition, 1 mH₂O = 9806.65 Pa.</p>
+    </article>
+
+    <article class="card">
+      <h2>Primary references</h2>
+      <p class="sub">These are the main external references used to check the formulas and constants.</p>
+      <p><a href="https://www.iapws.org/relguide/IF97-Rev.pdf">IAPWS-IF97 - Industrial Formulation for Water and Steam</a></p>
+      <p><a href="https://www.spiraxsarco.com/learn-about-steam/steam-engineering-principles-and-heat-transfer/what-is-steam">Spirax Sarco - Saturated steam tables</a></p>
+      <p><a href="https://support.industry.siemens.com/cs/attachments/103153706/Applikationshandbuch_e.pdf">Siemens - SIMOVERT MASTERDRIVES application formulas</a></p>
+      <p><a href="https://library.e.abb.com/public/a209d9dc29b24b789e0650b8de9c3f22/TechnicalGuideBook_EN_3AFE64514482_RevI.pdf">ABB - Guide to variable speed drives</a></p>
+      <p><a href="https://labvolt.festo.com/downloads/89791_F0.pdf">Festo Didactic - Pneumatic actuator force</a></p>
+      <p><a href="https://www.gates.com/content/dam/documents-library/installation-guides/BeltSizingGuide.pdf">Gates - Belt sizing guide</a></p>
+      <p><a href="https://knowledge.ni.com/KnowledgeArticleDetails?id=kA00Z000000PASfSAO">NI - 4-20 mA scaling</a></p>
+      <p><a href="https://www.nist.gov/pml/owm/metric-si/unit-conversion/pressure-and-gas-flow-unit-conversions">NIST - Pressure unit conversions</a></p>
+      <p><a href="https://www.electroluxprofessional.com/commercial-laundry-equipment/commercial-washers/w4400h-W4400H/">Electrolux Professional - Washer RPM / G-factor cross-check</a></p>
+    </article>
+  </main>
+
+  <footer>
+    <div class="shell">TechBench is a field aid, not a substitute for machine documentation, measurements, or safety limits. · <a href="./">Calculators</a> · <a href="https://github.com/aesgalexis/techbench">Source on GitHub</a></div>
+  </footer>
+</body>
+</html>
