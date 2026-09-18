@@ -18,34 +18,46 @@
   <main class="shell">
     <section class="intro">
       <p>No login. No backend. No telemetry. Just useful numbers.</p>
-      <span class="status">v0.1 · field build</span>
+      <span class="status">v0.2 · field build</span>
     </section>
 
-    <section class="grid">
-      <article class="card" id="drive-card">
+    <section class="picker-panel" aria-labelledby="tool-picker-label">
+      <label id="tool-picker-label" for="tool-picker">Choose a calculator</label>
+      <select id="tool-picker">
+        <option value="">Select a tool…</option>
+        <optgroup label="Mechanical">
+          <option value="drive">Drive speed / VFD frequency</option>
+          <option value="motor-speed">Motor synchronous speed & slip</option>
+          <option value="torque">Power & torque</option>
+          <option value="cylinder">Cylinder force</option>
+          <option value="belt">Open belt length</option>
+        </optgroup>
+        <optgroup label="Electrical & thermal">
+          <option value="power">Three-phase power</option>
+          <option value="heat">Water heating</option>
+        </optgroup>
+        <optgroup label="Conversions">
+          <option value="pressure">Pressure</option>
+        </optgroup>
+      </select>
+      <p class="picker-note">Only the selected tool is shown. Each calculator runs entirely in your browser.</p>
+    </section>
+
+    <section class="tool-stage">
+      <div class="empty-state" id="empty-state">
+        <strong>Pick a tool above.</strong>
+        <span>TechBench stays quiet until you need it.</span>
+      </div>
+
+      <article class="card tool-card" id="drive-card" data-tool="drive" hidden>
         <h2>Drive speed</h2>
         <p class="sub">Pulley ratio, driven RPM, and target VFD frequency.</p>
         <div class="fields">
-          <div class="field">
-            <label for="motor-rpm">Motor rated RPM</label>
-            <input id="motor-rpm" type="number" inputmode="decimal" value="960" min="0">
-          </div>
-          <div class="field">
-            <label for="rated-hz">Rated Hz</label>
-            <input id="rated-hz" type="number" inputmode="decimal" value="50" min="0">
-          </div>
-          <div class="field">
-            <label for="motor-pulley">Motor pulley · mm</label>
-            <input id="motor-pulley" type="number" inputmode="decimal" value="115" min="0">
-          </div>
-          <div class="field">
-            <label for="driven-pulley">Driven pulley · mm</label>
-            <input id="driven-pulley" type="number" inputmode="decimal" value="640" min="0">
-          </div>
-          <div class="field wide">
-            <label for="target-rpm">Target driven RPM</label>
-            <input id="target-rpm" type="number" inputmode="decimal" value="650" min="0">
-          </div>
+          <div class="field"><label for="motor-rpm">Motor rated RPM</label><input id="motor-rpm" type="number" inputmode="decimal" value="960" min="0"></div>
+          <div class="field"><label for="rated-hz">Rated Hz</label><input id="rated-hz" type="number" inputmode="decimal" value="50" min="0"></div>
+          <div class="field"><label for="motor-pulley">Motor pulley · mm</label><input id="motor-pulley" type="number" inputmode="decimal" value="115" min="0"></div>
+          <div class="field"><label for="driven-pulley">Driven pulley · mm</label><input id="driven-pulley" type="number" inputmode="decimal" value="640" min="0"></div>
+          <div class="field wide"><label for="target-rpm">Target driven RPM</label><input id="target-rpm" type="number" inputmode="decimal" value="650" min="0"></div>
         </div>
         <div class="result">
           <div class="result-line"><span class="result-label">Driven RPM @ rated Hz</span><span class="result-value" id="drive-rpm">—</span></div>
@@ -54,7 +66,40 @@
         </div>
       </article>
 
-      <article class="card" id="power-card">
+      <article class="card tool-card" id="motor-speed-card" data-tool="motor-speed" hidden>
+        <h2>Motor speed & slip</h2>
+        <p class="sub">Synchronous speed from frequency and pole count, plus loaded RPM from slip.</p>
+        <div class="fields">
+          <div class="field"><label for="speed-hz">Frequency · Hz</label><input id="speed-hz" type="number" inputmode="decimal" value="50" min="0"></div>
+          <div class="field"><label for="speed-poles">Motor poles</label><select id="speed-poles"><option>2</option><option>4</option><option selected>6</option><option>8</option><option>10</option><option>12</option></select></div>
+          <div class="field wide"><label for="speed-slip">Slip · %</label><input id="speed-slip" type="number" inputmode="decimal" value="2.5" min="0" max="99.9" step="0.1"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Synchronous speed</span><span class="result-value" id="speed-sync">—</span></div>
+          <div class="result-line"><span class="result-label">Estimated loaded speed</span><span class="result-value" id="speed-loaded">—</span></div>
+          <div class="error" id="speed-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="torque-card" data-tool="torque" hidden>
+        <h2>Power & torque</h2>
+        <p class="sub">Convert shaft power and RPM to torque, or torque and RPM back to power.</p>
+        <div class="mode" aria-label="Torque calculation mode">
+          <button type="button" class="active" data-torque-mode="torque">Find Nm</button>
+          <button type="button" data-torque-mode="power">Find kW</button>
+        </div>
+        <div class="fields">
+          <div class="field" id="torque-kw-field"><label for="torque-kw">Power · kW</label><input id="torque-kw" type="number" inputmode="decimal" value="18.5" min="0"></div>
+          <div class="field" id="torque-nm-field" hidden><label for="torque-nm">Torque · Nm</label><input id="torque-nm" type="number" inputmode="decimal" value="120" min="0"></div>
+          <div class="field"><label for="torque-rpm">Shaft speed · RPM</label><input id="torque-rpm" type="number" inputmode="decimal" value="1450" min="0"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label" id="torque-result-label">Estimated torque</span><span class="result-value" id="torque-result">—</span></div>
+          <div class="error" id="torque-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="power-card" data-tool="power" hidden>
         <h2>Three-phase power</h2>
         <p class="sub">Estimate electrical power or line current.</p>
         <div class="mode" aria-label="Calculation mode">
@@ -62,53 +107,26 @@
           <button type="button" data-power-mode="current">Find A</button>
         </div>
         <div class="fields">
-          <div class="field" id="power-amps-field">
-            <label for="power-amps">Current · A</label>
-            <input id="power-amps" type="number" inputmode="decimal" value="32" min="0">
-          </div>
-          <div class="field" id="power-kw-field" hidden>
-            <label for="power-kw">Power · kW</label>
-            <input id="power-kw" type="number" inputmode="decimal" value="18.5" min="0">
-          </div>
-          <div class="field">
-            <label for="power-volts">Line voltage · V</label>
-            <input id="power-volts" type="number" inputmode="decimal" value="400" min="0">
-          </div>
-          <div class="field">
-            <label for="power-pf">Power factor</label>
-            <input id="power-pf" type="number" inputmode="decimal" value="0.85" min="0.01" max="1" step="0.01">
-          </div>
-          <div class="field">
-            <label for="power-eff">Efficiency</label>
-            <input id="power-eff" type="number" inputmode="decimal" value="0.9" min="0.01" max="1" step="0.01">
-          </div>
+          <div class="field" id="power-amps-field"><label for="power-amps">Current · A</label><input id="power-amps" type="number" inputmode="decimal" value="32" min="0"></div>
+          <div class="field" id="power-kw-field" hidden><label for="power-kw">Power · kW</label><input id="power-kw" type="number" inputmode="decimal" value="18.5" min="0"></div>
+          <div class="field"><label for="power-volts">Line voltage · V</label><input id="power-volts" type="number" inputmode="decimal" value="400" min="0"></div>
+          <div class="field"><label for="power-pf">Power factor</label><input id="power-pf" type="number" inputmode="decimal" value="0.85" min="0.01" max="1" step="0.01"></div>
+          <div class="field"><label for="power-eff">Efficiency</label><input id="power-eff" type="number" inputmode="decimal" value="0.9" min="0.01" max="1" step="0.01"></div>
         </div>
         <div class="result">
-          <div class="result-line"><span class="result-label" id="power-result-label">Estimated power</span><span class="result-value" id="power-result">—</span></div>
+          <div class="result-line"><span class="result-label" id="power-result-label">Estimated output power</span><span class="result-value" id="power-result">—</span></div>
           <div class="error" id="power-error"></div>
         </div>
       </article>
 
-      <article class="card" id="heat-card">
+      <article class="card tool-card" id="heat-card" data-tool="heat" hidden>
         <h2>Water heating</h2>
         <p class="sub">Ideal energy and heat-up time, before real-world losses.</p>
         <div class="fields">
-          <div class="field">
-            <label for="heat-liters">Water · L</label>
-            <input id="heat-liters" type="number" inputmode="decimal" value="500" min="0">
-          </div>
-          <div class="field">
-            <label for="heat-kw">Heater · kW</label>
-            <input id="heat-kw" type="number" inputmode="decimal" value="36" min="0">
-          </div>
-          <div class="field">
-            <label for="heat-start">Start · °C</label>
-            <input id="heat-start" type="number" inputmode="decimal" value="15">
-          </div>
-          <div class="field">
-            <label for="heat-target">Target · °C</label>
-            <input id="heat-target" type="number" inputmode="decimal" value="60">
-          </div>
+          <div class="field"><label for="heat-liters">Water · L</label><input id="heat-liters" type="number" inputmode="decimal" value="500" min="0"></div>
+          <div class="field"><label for="heat-kw">Heater · kW</label><input id="heat-kw" type="number" inputmode="decimal" value="36" min="0"></div>
+          <div class="field"><label for="heat-start">Start · °C</label><input id="heat-start" type="number" inputmode="decimal" value="15"></div>
+          <div class="field"><label for="heat-target">Target · °C</label><input id="heat-target" type="number" inputmode="decimal" value="60"></div>
         </div>
         <div class="result">
           <div class="result-line"><span class="result-label">Ideal energy</span><span class="result-value" id="heat-energy">—</span></div>
@@ -117,34 +135,43 @@
         </div>
       </article>
 
-      <article class="card" id="pressure-card">
+      <article class="card tool-card" id="cylinder-card" data-tool="cylinder" hidden>
+        <h2>Cylinder force</h2>
+        <p class="sub">Theoretical extension and retraction force from pressure and cylinder dimensions.</p>
+        <div class="fields">
+          <div class="field"><label for="cyl-pressure">Pressure · bar</label><input id="cyl-pressure" type="number" inputmode="decimal" value="6" min="0"></div>
+          <div class="field"><label for="cyl-bore">Bore · mm</label><input id="cyl-bore" type="number" inputmode="decimal" value="80" min="0"></div>
+          <div class="field wide"><label for="cyl-rod">Rod · mm</label><input id="cyl-rod" type="number" inputmode="decimal" value="25" min="0"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Extension force</span><span class="result-value" id="cyl-extend">—</span></div>
+          <div class="result-line"><span class="result-label">Retraction force</span><span class="result-value" id="cyl-retract">—</span></div>
+          <div class="error" id="cyl-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="belt-card" data-tool="belt" hidden>
+        <h2>Open belt length</h2>
+        <p class="sub">Approximate belt pitch length from two pulley diameters and center distance.</p>
+        <div class="fields">
+          <div class="field"><label for="belt-a">Pulley A · mm</label><input id="belt-a" type="number" inputmode="decimal" value="115" min="0"></div>
+          <div class="field"><label for="belt-b">Pulley B · mm</label><input id="belt-b" type="number" inputmode="decimal" value="640" min="0"></div>
+          <div class="field wide"><label for="belt-center">Center distance · mm</label><input id="belt-center" type="number" inputmode="decimal" value="800" min="0"></div>
+        </div>
+        <div class="result">
+          <div class="result-line"><span class="result-label">Approx. belt length</span><span class="result-value" id="belt-mm">—</span></div>
+          <div class="result-line"><span class="result-label">In metres</span><span class="result-value" id="belt-m">—</span></div>
+          <div class="error" id="belt-error"></div>
+        </div>
+      </article>
+
+      <article class="card tool-card" id="pressure-card" data-tool="pressure" hidden>
         <h2>Pressure</h2>
         <p class="sub">Fast conversion for gauges, manuals, and datasheets.</p>
         <div class="fields">
-          <div class="field wide">
-            <label for="pressure-value">Value</label>
-            <input id="pressure-value" type="number" inputmode="decimal" value="6">
-          </div>
-          <div class="field">
-            <label for="pressure-from">From</label>
-            <select id="pressure-from">
-              <option value="bar" selected>bar</option>
-              <option value="kPa">kPa</option>
-              <option value="MPa">MPa</option>
-              <option value="psi">psi</option>
-              <option value="mH2O">mH₂O</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="pressure-to">To</label>
-            <select id="pressure-to">
-              <option value="bar">bar</option>
-              <option value="kPa">kPa</option>
-              <option value="MPa">MPa</option>
-              <option value="psi" selected>psi</option>
-              <option value="mH2O">mH₂O</option>
-            </select>
-          </div>
+          <div class="field wide"><label for="pressure-value">Value</label><input id="pressure-value" type="number" inputmode="decimal" value="6"></div>
+          <div class="field"><label for="pressure-from">From</label><select id="pressure-from"><option value="bar" selected>bar</option><option value="kPa">kPa</option><option value="MPa">MPa</option><option value="psi">psi</option><option value="mH2O">mH₂O</option></select></div>
+          <div class="field"><label for="pressure-to">To</label><select id="pressure-to"><option value="bar">bar</option><option value="kPa">kPa</option><option value="MPa">MPa</option><option value="psi" selected>psi</option><option value="mH2O">mH₂O</option></select></div>
         </div>
         <div class="result">
           <div class="result-line"><span class="result-label">Converted</span><span class="result-value" id="pressure-result">—</span></div>
