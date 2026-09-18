@@ -4,6 +4,8 @@ A small, practical field toolbox for technicians.
 
 **Live:** https://aesgalexis.github.io/techbench/
 
+**Accuracy and sources:** https://aesgalexis.github.io/techbench/accuracy.html
+
 TechBench is intentionally simple: no accounts, no backend, no framework, no telemetry. Pick a calculator, get the number, move on.
 
 ## Tools
