@@ -45,8 +45,9 @@ const speed = synchronousMotorSpeed({ hz: 50, poles: 6, slipPercent: 2.5 });
 close(speed.synchronousRpm, 1000);
 close(speed.loadedRpm, 975);
 
-close(torqueNm({ kw: 18.5, rpm: 1450 }), 121.83585298758885);
-close(powerFromTorqueKw({ torque: 121.84482758620689, rpm: 1450 }), 18.5);
+const ratedTorque = torqueNm({ kw: 18.5, rpm: 1450 });
+close(ratedTorque, 121.83585298758885);
+close(powerFromTorqueKw({ torque: ratedTorque, rpm: 1450 }), 18.5);
 
 const kw = threePhasePowerKw({
   volts: 400,
