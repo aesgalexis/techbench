@@ -16,7 +16,7 @@ const $ = (id) => document.getElementById(id);
 const n = (id) => Number($(id).value);
 
 function format(value, digits = 2) {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(value)) return "-";
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: digits }).format(value);
 }
 
@@ -53,8 +53,8 @@ function renderDrive() {
     $("drive-hz").textContent = `${format(hz, 1)} Hz`;
     $("drive-error").textContent = "";
   } catch (error) {
-    $("drive-rpm").textContent = "—";
-    $("drive-hz").textContent = "—";
+    $("drive-rpm").textContent = "-";
+    $("drive-hz").textContent = "-";
     $("drive-error").textContent = error.message;
   }
 }
@@ -70,8 +70,8 @@ function renderMotorSpeed() {
     $("speed-loaded").textContent = `${format(result.loadedRpm, 1)} rpm`;
     $("speed-error").textContent = "";
   } catch (error) {
-    $("speed-sync").textContent = "—";
-    $("speed-loaded").textContent = "—";
+    $("speed-sync").textContent = "-";
+    $("speed-loaded").textContent = "-";
     $("speed-error").textContent = error.message;
   }
 }
@@ -101,7 +101,7 @@ function renderTorque() {
     }
     $("torque-error").textContent = "";
   } catch (error) {
-    $("torque-result").textContent = "—";
+    $("torque-result").textContent = "-";
     $("torque-error").textContent = error.message;
   }
 }
@@ -137,7 +137,7 @@ function renderPower() {
     }
     $("power-error").textContent = "";
   } catch (error) {
-    $("power-result").textContent = "—";
+    $("power-result").textContent = "-";
     $("power-error").textContent = error.message;
   }
 }
@@ -154,8 +154,8 @@ function renderHeat() {
     $("heat-time").textContent = `${format(result.minutes, 1)} min`;
     $("heat-error").textContent = "";
   } catch (error) {
-    $("heat-energy").textContent = "—";
-    $("heat-time").textContent = "—";
+    $("heat-energy").textContent = "-";
+    $("heat-time").textContent = "-";
     $("heat-error").textContent = error.message;
   }
 }
@@ -171,8 +171,8 @@ function renderCylinder() {
     $("cyl-retract").textContent = `${format(result.retractN / 1000, 2)} kN`;
     $("cyl-error").textContent = "";
   } catch (error) {
-    $("cyl-extend").textContent = "—";
-    $("cyl-retract").textContent = "—";
+    $("cyl-extend").textContent = "-";
+    $("cyl-retract").textContent = "-";
     $("cyl-error").textContent = error.message;
   }
 }
@@ -188,8 +188,8 @@ function renderBelt() {
     $("belt-m").textContent = `${format(mm / 1000, 3)} m`;
     $("belt-error").textContent = "";
   } catch (error) {
-    $("belt-mm").textContent = "—";
-    $("belt-m").textContent = "—";
+    $("belt-mm").textContent = "-";
+    $("belt-m").textContent = "-";
     $("belt-error").textContent = error.message;
   }
 }
@@ -201,7 +201,7 @@ function renderPressure() {
     $("pressure-result").textContent = `${format(converted, 3)} ${to === "mH2O" ? "mH₂O" : to}`;
     $("pressure-error").textContent = "";
   } catch (error) {
-    $("pressure-result").textContent = "—";
+    $("pressure-result").textContent = "-";
     $("pressure-error").textContent = error.message;
   }
 }
