@@ -14,10 +14,18 @@ TechBench is intentionally simple: no accounts, no backend, no framework, no tel
 - **Power & torque** - convert shaft power and RPM to torque, or torque back to power.
 - **Cylinder force** - theoretical extension and retraction force from pressure, bore, and rod diameter.
 - **Open belt length** - approximate belt length from pulley diameters and center distance.
+- **Gearbox ratio** - calculate output RPM from a reduction ratio, or the ratio required for a target output speed.
 
-### Electrical & thermal
-- **Three-phase power** - estimate electrical power or current from voltage, power factor, and efficiency.
+### Laundry & process
+- **Washer G-force** - calculate extraction G from drum diameter and RPM, or RPM required for a target G.
+- **Roller surface speed** - convert roller diameter and RPM to m/min, or work backwards from line speed.
+- **Speed differential** - compare two line speeds or calculate a target secondary speed from a percentage differential.
+- **Steam saturation temperature** - approximate saturated-steam temperature from bar/psi, with gauge or absolute pressure.
 - **Water heating** - estimate energy and ideal heating time for a water load.
+
+### Electrical & instrumentation
+- **Three-phase power** - estimate electrical power or current from voltage, power factor, and efficiency.
+- **4-20 mA scaler** - convert loop current to engineering units or calculate the expected current for a known value.
 
 ### Conversions
 - **Pressure** - convert between bar, kPa, MPa, psi, and mH₂O.
