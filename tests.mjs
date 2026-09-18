@@ -31,7 +31,7 @@ const kw = threePhasePowerKw({
   powerFactor: 0.85,
   efficiency: 0.9,
 });
-close(kw, 16.957927662052084);
+close(kw, 16.960241507714446);
 
 close(
   threePhaseCurrentA({
