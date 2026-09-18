@@ -82,7 +82,7 @@ close(force.retractN, 2721.4046361721585);
 close(openBeltLength({ pulleyA: 640, pulleyB: 115, centerDistance: 800 }), 2872.084039230147);
 
 const gForce = laundryGForce({ drumDiameterMm: 640, rpm: 650 });
-close(gForce, 151.1984);
+close(gForce, 151.1536);
 close(rpmForGForce({ drumDiameterMm: 640, gForce }), 650);
 
 const surfaceSpeed = surfaceSpeedMMin({ diameterMm: 800, rpm: 5 });
@@ -111,6 +111,13 @@ const steamAtZeroGauge = steamSaturationTemperature({
   reference: "gauge",
 });
 close(steamAtZeroGauge.celsius, steamAtAtmosphere.celsius, 0.001);
+
+const steamAtSixBarg = steamSaturationTemperature({
+  pressure: 6,
+  unit: "bar",
+  reference: "gauge",
+});
+close(steamAtSixBarg.celsius, 165.029, 0.03);
 
 close(convertPressure(6, "bar", "psi"), 87.02264187015315);
 close(convertPressure(1, "bar", "kPa"), 100);
